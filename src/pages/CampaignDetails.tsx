@@ -75,43 +75,46 @@ const CampaignDetails: React.FC = () => {
 
     return (
         <div className="space-y-6">
-            <header className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-2xl font-bold text-gray-900">{campaign.name}</h1>
-                    <p className="text-gray-500">Manage campaign configuration and schedule.</p>
-                </div>
-                <div className="flex gap-2">
-                    <button className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
-                        Pause Campaign
-                    </button>
-                    <button
-                        onClick={handleGenerate}
-                        disabled={isGenerating}
-                        className="px-4 py-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700 disabled:opacity-50 flex items-center gap-2"
-                    >
-                        {isGenerating && <Loader2 className="w-4 h-4 animate-spin" />}
-                        {isGenerating ? 'Generating...' : 'Generate Next Week'}
-                    </button>
-                </div>
-            </header>
+            <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
+                <header className="flex items-center justify-between px-8 pt-6 pb-4">
+                    <div>
+                        <h1 className="text-2xl font-bold text-gray-900">{campaign.name}</h1>
+                        <p className="text-gray-500">Manage campaign configuration and schedule.</p>
+                    </div>
+                    <div className="flex gap-2">
+                        <button className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                            Pause Campaign
+                        </button>
+                        <button
+                            onClick={handleGenerate}
+                            disabled={isGenerating}
+                            className="px-4 py-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700 disabled:opacity-50 flex items-center gap-2"
+                        >
+                            {isGenerating && <Loader2 className="w-4 h-4 animate-spin" />}
+                            {isGenerating ? 'Generating...' : 'Generate Next Week'}
+                        </button>
+                    </div>
+                </header>
 
-            <Tabs defaultValue="schedule" onValueChange={handleTabChange}>
-                <TabsList>
-                    <TabsTrigger value="schedule" icon={Calendar}>Schedule</TabsTrigger>
-                    <TabsTrigger value="config" icon={Settings}>Configuration</TabsTrigger>
-                    <TabsTrigger value="personas" icon={Users}>Personas</TabsTrigger>
-                    <TabsTrigger value="history" icon={MessageSquare}>History</TabsTrigger>
-                </TabsList>
+                <Tabs defaultValue="schedule" onValueChange={handleTabChange}>
+                    <div className="px-8">
+                        <TabsList>
+                            <TabsTrigger value="schedule" icon={Calendar}>Schedule</TabsTrigger>
+                            <TabsTrigger value="config" icon={Settings}>Configuration</TabsTrigger>
+                            <TabsTrigger value="personas" icon={Users}>Personas</TabsTrigger>
+                            <TabsTrigger value="history" icon={MessageSquare}>History</TabsTrigger>
+                        </TabsList>
+                    </div>
 
-                <div className="mt-6">
-                    <TabsContent value="schedule">
-                        <CalendarWorkspace
-                            posts={campaign?.posts || []}
-                            campaignStartDate={campaign?.start_date || null}
-                        />
-                    </TabsContent>
-                    <TabsContent value="config">
-                        <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-6">
+                    <div className="px-8 pb-8">
+                        <TabsContent value="schedule">
+                            <CalendarWorkspace
+                                posts={campaign?.posts || []}
+                                campaignStartDate={campaign?.start_date || null}
+                            />
+                        </TabsContent>
+                        <TabsContent value="config">
+                            <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-6">
                             {/* Company Information */}
                             <div>
                                 <div className="flex items-center gap-2 mb-4">
@@ -267,7 +270,7 @@ const CampaignDetails: React.FC = () => {
                     </TabsContent>
 
                     <TabsContent value="personas">
-                        <div className="bg-white rounded-xl border border-gray-200 p-6">
+                        <div className="bg-white rounded-xl p-6">
                             <div className="flex justify-between items-center mb-6">
                                 <h3 className="font-semibold text-gray-900 text-lg">Campaign Personas</h3>
                                 <span className="text-sm text-gray-500">
@@ -431,9 +434,10 @@ const CampaignDetails: React.FC = () => {
                                 )}
                             </div>
                         </div>
-                    </TabsContent>
-                </div>
-            </Tabs>
+                        </TabsContent>
+                    </div>
+                </Tabs>
+            </div>
         </div>
     );
 };

@@ -704,7 +704,7 @@ const NewCampaign: React.FC = () => {
                                     onClick={() => setStep(step + 1)}
                                     disabled={
                                         (step === 1 && (!formData.companyName || !formData.companyDescription)) ||
-                                        (step === 2 && !formData.campaignName) ||
+                                        (step === 2 && (!formData.campaignName || !formData.startDate)) ||
                                         (step === 3 && (formData.keywords.length === 0 || formData.subreddits.length === 0))
                                     }
                                     className="flex items-center gap-2 px-6 py-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700 font-medium transition shadow-sm hover:shadow disabled:opacity-50 disabled:cursor-not-allowed"

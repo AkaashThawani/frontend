@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, GripVertical, Table, Calendar as CalendarIcon } from 'lucide-react';
 
 interface CalendarWorkspaceProps {
@@ -7,33 +7,27 @@ interface CalendarWorkspaceProps {
 }
 
 const CalendarWorkspace: React.FC<CalendarWorkspaceProps> = ({ posts, campaignStartDate }) => {
-    const [weekStart, setWeekStart] = useState<Date>(new Date());
     const [selectedPost, setSelectedPost] = useState<any>(null);
     const [viewMode, setViewMode] = useState<'calendar' | 'table'>('calendar');
 
-    useEffect(() => {
-        // Find the earliest post date or use campaign start_date
-        if (posts.length > 0) {
-            const sortedPosts = [...posts].sort((a, b) => 
-                new Date(a.scheduled_time).getTime() - new Date(b.scheduled_time).getTime()
-            );
-            const firstPostDate = new Date(sortedPosts[0].scheduled_time);
-            
-            // Set to the Monday of that week
-            const dayOfWeek = firstPostDate.getDay();
-            const daysToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
-            const monday = new Date(firstPostDate);
-            monday.setDate(monday.getDate() + daysToMonday);
-            monday.setHours(0, 0, 0, 0);
-            
-            setWeekStart(monday);
-        } else if (campaignStartDate) {
-            // Use campaign start date if no posts yet
+    // Initialize weekStart with campaign start date, defaulting to today if not provided
+    const [weekStart, setWeekStart] = useState<Date>(() => {
+        if (campaignStartDate) {
+            const startDate = new Date(campaignStartDate);
+            startDate.setHours(0, 0, 0, 0);
+            return startDate;
+        }
+        return new Date();
+    });
+
+    // Update weekStart when campaignStartDate changes
+    React.useEffect(() => {
+        if (campaignStartDate) {
             const startDate = new Date(campaignStartDate);
             startDate.setHours(0, 0, 0, 0);
             setWeekStart(startDate);
         }
-    }, [posts, campaignStartDate]);
+    }, [campaignStartDate]);
 
     // Group posts by day
     const groupPostsByDay = () => {
