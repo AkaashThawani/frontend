@@ -8,13 +8,10 @@ const Dashboard: React.FC = () => {
     const [stats, setStats] = useState<any>(null);
     const [upcomingPosts, setUpcomingPosts] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    const [loadingPosts, setLoadingPosts] = useState(false);
 
     useEffect(() => {
         const loadDashboardData = async () => {
             try {
-                setLoadingPosts(true);
-
                 // Load metrics
                 const metricsData = await getMetrics();
                 setStats(metricsData);
@@ -49,7 +46,6 @@ const Dashboard: React.FC = () => {
                 console.error('Failed to load dashboard data:', error);
             } finally {
                 setLoading(false);
-                setLoadingPosts(false);
             }
         };
 

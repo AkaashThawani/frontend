@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/Tabs';
-import { Plus, Edit2, Trash2, Search, Hash, Users as UsersIcon, X, Loader2, Settings as SettingsIcon } from 'lucide-react';
+import { Plus, Edit2, Trash2, Search, Hash, Users as UsersIcon, X, Loader2 } from 'lucide-react';
 import { getKeywords, createKeyword, updateKeyword, deleteKeyword, getSubreddits, createSubreddit, updateSubreddit, deleteSubreddit, getMasterPersonas, createMasterPersona, updateMasterPersona, deleteMasterPersona } from '../lib/api';
 
 interface ModalState {

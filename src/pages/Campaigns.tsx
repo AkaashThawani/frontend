@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, ChevronRight, Activity, Calendar } from 'lucide-react';
+import { Plus, ChevronRight } from 'lucide-react';
 import { getCampaigns } from '../lib/api';
 import LoadingOverlay from '../components/LoadingOverlay';
 

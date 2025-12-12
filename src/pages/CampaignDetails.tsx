@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/Tabs';
-import { Calendar, Settings, Users, MessageSquare, Loader2, ChevronDown, ChevronUp, Building2, Hash, Search, BarChart3, CalendarIcon, Clock, User, Check } from 'lucide-react';
+import { Calendar, Settings, Users, MessageSquare, Loader2, ChevronDown, ChevronUp, Building2, Hash, Search, BarChart3, CalendarIcon, Clock, User } from 'lucide-react';
 import CalendarWorkspace from '../components/CalendarWorkspace';
-import { getCampaign, generateSchedule, getAdvancedSettings, updateAdvancedSettings } from '../lib/api';
+import { getCampaign, generateSchedule, getAdvancedSettings } from '../lib/api';
 import LoadingOverlay from '../components/LoadingOverlay';
 
 const CampaignDetails: React.FC = () => {
@@ -11,11 +11,9 @@ const CampaignDetails: React.FC = () => {
     const [campaign, setCampaign] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [isGenerating, setIsGenerating] = useState(false);
-    const [generationResult, setGenerationResult] = useState<any>(null);
     const [expandedPersonas, setExpandedPersonas] = useState<Set<number>>(new Set());
     const [advancedSettings, setAdvancedSettings] = useState<any>(null);
     const [loadingSettings, setLoadingSettings] = useState(false);
-    const [savingSettings, setSavingSettings] = useState(false);
 
     useEffect(() => {
         const loadCampaign = async () => {
@@ -38,7 +36,6 @@ const CampaignDetails: React.FC = () => {
         setIsGenerating(true);
         try {
             const result = await generateSchedule(id);
-            setGenerationResult(result);
 
             // Refetch campaign to get updated posts
             const updatedCampaign = await getCampaign(id);
@@ -63,20 +60,6 @@ const CampaignDetails: React.FC = () => {
             console.error('Failed to load advanced settings:', error);
         } finally {
             setLoadingSettings(false);
-        }
-    };
-
-    const saveAdvancedSettings = async () => {
-        if (!id || !advancedSettings) return;
-        setSavingSettings(true);
-        try {
-            await updateAdvancedSettings(id, advancedSettings);
-            alert('Settings saved successfully!');
-        } catch (error) {
-            console.error('Failed to save settings:', error);
-            alert('Failed to save settings. Check console.');
-        } finally {
-            setSavingSettings(false);
         }
     };
 
