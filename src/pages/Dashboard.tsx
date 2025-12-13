@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { MetricCard } from '../components/MetricCard';
 import { Users, FileText, BarChart3, Activity, Clock } from 'lucide-react';
-import { getMetrics, getCampaigns } from '../lib/api';
+import { getMetrics, getCampaigns, getCampaign } from '../lib/api';
 import LoadingOverlay from '../components/LoadingOverlay';
 
 const Dashboard: React.FC = () => {
@@ -22,8 +22,7 @@ const Dashboard: React.FC = () => {
 
                 for (const campaign of campaigns) {
                     try {
-                        const response = await fetch(`http://localhost:8000/api/campaigns/${campaign.id}`);
-                        const data = await response.json();
+                        const data = await getCampaign(campaign.id);
                         if (data.posts) {
                             allPosts.push(...data.posts.map((p: any) => ({
                                 ...p,
