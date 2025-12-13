@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/Tabs';
-import { Calendar, Settings, Users, MessageSquare, Loader2, ChevronDown, ChevronUp, Building2, Hash, Search, BarChart3, CalendarIcon, Clock, User } from 'lucide-react';
+import { Calendar, Settings, Users, MessageSquare, Loader2, ChevronDown, ChevronUp, Building2, Hash, Search, BarChart3, CalendarIcon, Clock, User, RefreshCw } from 'lucide-react';
 import CalendarWorkspace from '../components/CalendarWorkspace';
 import { getCampaign, generateSchedule, getAdvancedSettings } from '../lib/api';
 import LoadingOverlay from '../components/LoadingOverlay';
@@ -30,6 +30,19 @@ const CampaignDetails: React.FC = () => {
 
         loadCampaign();
     }, [id]);
+
+    const handleRefresh = async () => {
+        if (!id) return;
+        setLoading(true);
+        try {
+            const campaignData = await getCampaign(id);
+            setCampaign(campaignData);
+        } catch (error) {
+            console.error('Failed to refresh campaign:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleGenerate = async () => {
         if (!id) return;
@@ -82,8 +95,17 @@ const CampaignDetails: React.FC = () => {
                         <p className="text-gray-500">Manage campaign configuration and schedule.</p>
                     </div>
                     <div className="flex gap-2">
-                        <button className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
-                            Pause Campaign
+                        <button
+                            onClick={handleRefresh}
+                            disabled={loading}
+                            className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 disabled:opacity-50 flex items-center gap-2"
+                        >
+                            {loading ? (
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                            ) : (
+                                <RefreshCw className="w-4 h-4" />
+                            )}
+                            {loading ? 'Refreshing...' : 'Refresh'}
                         </button>
                         <button
                             onClick={handleGenerate}

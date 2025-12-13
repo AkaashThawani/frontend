@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight, ChevronDown, ChevronUp, Check, X, Search, Calendar as CalendarIcon, Hash, BarChart3, Users, Building2 } from 'lucide-react';
 import clsx from 'clsx';
-import { createCampaign, getMasterPersonas, getKeywords, getSubreddits, generateSchedule } from '../lib/api';
+import { createCampaign, getMasterPersonas, getKeywords, getSubreddits, generateSchedule, getCampaign } from '../lib/api';
 import LoadingOverlay from '../components/LoadingOverlay';
 
 const NewCampaign: React.FC = () => {
@@ -143,7 +143,32 @@ const NewCampaign: React.FC = () => {
             setIsGenerating(true);
             try {
                 await generateSchedule(result.id);
-                console.log("✓ Generated first week of posts");
+                console.log("✓ Started generating first week of posts");
+
+                // Poll for posts to be generated before navigating
+                const maxAttempts = 24; // 24 attempts * 5 seconds = 120 seconds max wait
+                let attempts = 0;
+                let postsGenerated = false;
+
+                while (attempts < maxAttempts && !postsGenerated) {
+                    await new Promise(resolve => setTimeout(resolve, 5000)); // Wait 5 seconds
+                    
+                    try {
+                        const campaignData = await getCampaign(result.id);
+                        if (campaignData.posts && campaignData.posts.length > 0) {
+                            postsGenerated = true;
+                            console.log(`✓ Posts generated successfully (${campaignData.posts.length} posts)`);
+                        }
+                    } catch (pollError) {
+                        console.error("Error polling for posts:", pollError);
+                    }
+                    
+                    attempts++;
+                }
+
+                if (!postsGenerated) {
+                    console.warn("⚠️ Timeout waiting for posts to generate, navigating anyway");
+                }
             } catch (genError) {
                 console.error("Failed to generate first week:", genError);
                 // Don't block navigation, just log the error
