@@ -70,7 +70,8 @@ const CalendarWorkspace: React.FC<CalendarWorkspaceProps> = ({ posts, campaignSt
     return (
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm flex flex-col h-[600px]">
             {/* Toolbar */}
-            <div className="p-4 border-b border-gray-200 flex justify-between items-center">
+            <div className="p-4 border-b border-gray-200">
+                <div className="flex justify-between items-center">
                 <div className="flex items-center gap-4">
                     <div className="flex bg-gray-100 rounded-lg p-1">
                         <button
@@ -114,9 +115,15 @@ const CalendarWorkspace: React.FC<CalendarWorkspaceProps> = ({ posts, campaignSt
                         </button>
                     </div>
                 </div>
-                <div className="text-sm text-gray-500">
-                    {posts.length} Posts Scheduled
+                    <div className="text-sm text-gray-500">
+                        {posts.length} Posts Scheduled
+                    </div>
                 </div>
+                {posts.length === 0 && (
+                    <div className="mt-2 text-xs text-gray-400 italic">
+                        💡 If you don't see posts, please refresh after 5-10 seconds
+                    </div>
+                )}
             </div>
 
             {/* Content Area */}
